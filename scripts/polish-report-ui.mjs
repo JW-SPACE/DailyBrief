@@ -152,10 +152,18 @@ function normalizeText(text) {
   return text.replace(/\s+/g, " ").trim();
 }
 
+function splitSentences(text) {
+  const decimalDot = "__DAILY_BRIEF_DECIMAL_DOT__";
+  const protectedText = text.replace(/(\d)\.(?=\d)/g, `$1${decimalDot}`);
+  return (protectedText.match(/[^。；;.!?]+[。；;.!?]?/g) ?? [protectedText]).map((sentence) =>
+    sentence.split(decimalDot).join("."),
+  );
+}
+
 function splitTextBlocks(text, maxItems = 8) {
   const normalized = normalizeText(text);
   if (!normalized) return [];
-  const sentenceMatches = normalized.match(/[^。；;.!?]+[。；;.!?]?/g) ?? [normalized];
+  const sentenceMatches = splitSentences(normalized);
   const pieces = [];
 
   for (const sentence of sentenceMatches) {
