@@ -225,6 +225,9 @@ jobs:
       - name: Build static site (index + archive)
         run: npm run build-site
 
+      - name: Polish report readability
+        run: node scripts/polish-report-ui.mjs
+
       - name: Publish to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
